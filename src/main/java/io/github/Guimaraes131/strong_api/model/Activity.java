@@ -22,7 +22,7 @@ public class Activity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private int duration;
+    private Integer duration;
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)
