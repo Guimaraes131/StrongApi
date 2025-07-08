@@ -47,4 +47,8 @@ public class ActivityService {
 
         return repository.findAll(example);
     }
+
+    public void update(Activity activity) {
+        repository.save(activity);
+    }
 }

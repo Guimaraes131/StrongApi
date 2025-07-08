@@ -79,4 +79,17 @@ public class ActivityController {
 
         return ResponseEntity.ok(dtos);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody PostActivityDTO dto) {
+        UUID uuid = UUID.fromString(id);
+
+        return service.get(uuid)
+                .map(entity -> {
+                    mapper.updateFromDTO(dto, entity);
+                    service.update(entity);
+
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
