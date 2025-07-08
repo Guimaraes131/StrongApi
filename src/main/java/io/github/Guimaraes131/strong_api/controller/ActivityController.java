@@ -4,6 +4,8 @@ import io.github.Guimaraes131.strong_api.controller.dto.GetActivityDTO;
 import io.github.Guimaraes131.strong_api.controller.dto.PostActivityDTO;
 import io.github.Guimaraes131.strong_api.controller.mapper.ActivityMapper;
 import io.github.Guimaraes131.strong_api.model.Activity;
+import io.github.Guimaraes131.strong_api.model.enums.Category;
+import io.github.Guimaraes131.strong_api.model.enums.Intensity;
 import io.github.Guimaraes131.strong_api.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -60,5 +63,20 @@ public class ActivityController {
 
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GetActivityDTO>> index(
+            @RequestParam(required = false, value = "type") String type,
+            @RequestParam(required = false, value = "intensity") Intensity intensity,
+            @RequestParam(required = false, value = "category") Category category) {
+
+        List<Activity> activities = service.index(type, intensity, category);
+
+        List<GetActivityDTO> dtos = activities.stream()
+                .map(mapper::toDTO)
+                .toList();
+
+        return ResponseEntity.ok(dtos);
     }
 }
