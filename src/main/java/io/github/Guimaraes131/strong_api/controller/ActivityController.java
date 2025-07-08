@@ -49,4 +49,16 @@ public class ActivityController {
                     return ResponseEntity.ok(dto);
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        UUID uuid = UUID.fromString(id);
+
+        return service.get(uuid)
+                .map(entity -> {
+                    service.delete(entity);
+
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

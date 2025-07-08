@@ -21,4 +21,8 @@ public class ActivityService {
     public Optional<Activity> get(UUID id) {
         return repository.findById(id);
     }
+
+    public void delete(Activity activity) {
+        repository.delete(activity);
+    }
 }
