@@ -2,6 +2,7 @@ package io.github.Guimaraes131.strong_api.controller;
 
 import io.github.Guimaraes131.strong_api.controller.dto.GetActivityDTO;
 import io.github.Guimaraes131.strong_api.controller.dto.PostActivityDTO;
+import io.github.Guimaraes131.strong_api.controller.dto.Stats;
 import io.github.Guimaraes131.strong_api.controller.mapper.ActivityMapper;
 import io.github.Guimaraes131.strong_api.model.Activity;
 import io.github.Guimaraes131.strong_api.model.enums.Category;
@@ -92,5 +93,12 @@ public class ActivityController {
 
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Stats> stats() {
+        Stats stats = service.stats();
+
+        return ResponseEntity.ok(stats);
     }
 }
