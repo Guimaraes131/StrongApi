@@ -7,6 +7,7 @@ import io.github.Guimaraes131.strong_api.model.Activity;
 import io.github.Guimaraes131.strong_api.model.enums.Category;
 import io.github.Guimaraes131.strong_api.model.enums.Intensity;
 import io.github.Guimaraes131.strong_api.service.ActivityService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class ActivityController {
     private final ActivityMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody PostActivityDTO dto) {
+    public ResponseEntity<Void> create(@RequestBody @Valid PostActivityDTO dto) {
         Activity activity = mapper.toEntity(dto);
 
         System.out.println(activity);
@@ -81,7 +82,7 @@ public class ActivityController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable String id, @RequestBody PostActivityDTO dto) {
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody @Valid PostActivityDTO dto) {
         UUID uuid = UUID.fromString(id);
 
         return service.get(uuid)
