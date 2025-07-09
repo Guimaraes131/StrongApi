@@ -1,5 +1,6 @@
 package io.github.Guimaraes131.strong_api.controller;
 
+import io.github.Guimaraes131.strong_api.GenericController;
 import io.github.Guimaraes131.strong_api.controller.dto.GetActivityDTO;
 import io.github.Guimaraes131.strong_api.controller.dto.PostActivityDTO;
 import io.github.Guimaraes131.strong_api.controller.dto.Stats;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/activities")
 @RequiredArgsConstructor
-public class ActivityController {
+public class ActivityController implements GenericController {
 
     private final ActivityService service;
     private final ActivityMapper mapper;
@@ -30,17 +31,9 @@ public class ActivityController {
     public ResponseEntity<Void> create(@RequestBody @Valid PostActivityDTO dto) {
         Activity activity = mapper.toEntity(dto);
 
-        System.out.println(activity);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(activity.getId())
-                .toUri();
-
         service.create(activity);
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(generateLocationHeader(activity.getId())).build();
     }
 
     @GetMapping("/{id}")
