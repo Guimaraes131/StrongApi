@@ -8,6 +8,7 @@ import io.github.Guimaraes131.strong_api.model.Activity;
 import io.github.Guimaraes131.strong_api.model.enums.Category;
 import io.github.Guimaraes131.strong_api.model.enums.Intensity;
 import io.github.Guimaraes131.strong_api.repository.ActivityRepository;
+import io.github.Guimaraes131.strong_api.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -26,13 +27,19 @@ import java.util.stream.Collectors;
 public class ActivityService {
 
     private final ActivityRepository repository;
+    private final SecurityService service;
 
     public void create(Activity activity) {
+        var user = service.getLoggedInUser();
+
+        activity.setUser(user);
         repository.save(activity);
     }
 
     public Optional<Activity> get(UUID id) {
-        return repository.findById(id);
+        var user = service.getLoggedInUser();
+
+        return repository.findByIdAndUser(id, user);
     }
 
     public void delete(Activity activity) {
@@ -41,6 +48,7 @@ public class ActivityService {
 
     public List<Activity> index(String type, Intensity intensity, Category category) {
         var activity = new Activity();
+        var user = service.getLoggedInUser();
 
         activity.setType(type);
         activity.setIntensity(intensity);
@@ -52,8 +60,11 @@ public class ActivityService {
                 .withIgnoreCase();
 
         Example<Activity> example = Example.of(activity, matcher);
+        List<Activity> activities = repository.findAll(example);
 
-        return repository.findAll(example);
+        return activities.stream()
+                .filter(ac -> ac.getUser().equals(user))
+                .toList();
     }
 
     public void update(Activity activity) {
@@ -64,8 +75,9 @@ public class ActivityService {
         LocalDate now = LocalDate.now();
         LocalDate start = now.with(DayOfWeek.MONDAY);
         LocalDate end = now.with(DayOfWeek.SUNDAY);
+        var user = service.getLoggedInUser();
 
-        List<Activity> activities = repository.findAllByDateBetween(start, end);
+        List<Activity> activities = repository.findAllByDateBetweenAndUser(start, end, user);
 
         Integer totalDurationMinutes = activities
                 .stream()
