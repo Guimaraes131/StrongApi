@@ -29,4 +29,8 @@ public class Activity {
     private Intensity intensity;
 
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
