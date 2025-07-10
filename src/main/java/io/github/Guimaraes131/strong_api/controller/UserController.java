@@ -1,6 +1,5 @@
 package io.github.Guimaraes131.strong_api.controller;
 
-import io.github.Guimaraes131.strong_api.GenericController;
 import io.github.Guimaraes131.strong_api.controller.dto.PostUserDTO;
 import io.github.Guimaraes131.strong_api.controller.mapper.UserMapper;
 import io.github.Guimaraes131.strong_api.model.User;

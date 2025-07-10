@@ -1,6 +1,5 @@
 package io.github.Guimaraes131.strong_api.controller;
 
-import io.github.Guimaraes131.strong_api.GenericController;
 import io.github.Guimaraes131.strong_api.controller.dto.GetActivityDTO;
 import io.github.Guimaraes131.strong_api.controller.dto.PostActivityDTO;
 import io.github.Guimaraes131.strong_api.controller.dto.Stats;
@@ -12,6 +11,7 @@ import io.github.Guimaraes131.strong_api.service.ActivityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +26,7 @@ public class ActivityController implements GenericController {
     private final ActivityMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> create(@RequestBody @Valid PostActivityDTO dto) {
         Activity activity = mapper.toEntity(dto);
 
@@ -35,6 +36,7 @@ public class ActivityController implements GenericController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<GetActivityDTO> get(@PathVariable String id) {
         UUID uuid = UUID.fromString(id);
 
@@ -47,6 +49,7 @@ public class ActivityController implements GenericController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> delete(@PathVariable String id) {
         UUID uuid = UUID.fromString(id);
 
@@ -59,6 +62,7 @@ public class ActivityController implements GenericController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<GetActivityDTO>> index(
             @RequestParam(required = false, value = "type") String type,
             @RequestParam(required = false, value = "intensity") Intensity intensity,
@@ -74,6 +78,7 @@ public class ActivityController implements GenericController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> update(@PathVariable String id, @RequestBody @Valid PostActivityDTO dto) {
         UUID uuid = UUID.fromString(id);
 
@@ -87,6 +92,7 @@ public class ActivityController implements GenericController {
     }
 
     @GetMapping("/stats")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Stats> stats() {
         Stats stats = service.stats();
 

@@ -1,4 +1,4 @@
-package io.github.Guimaraes131.strong_api;
+package io.github.Guimaraes131.strong_api.controller;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
