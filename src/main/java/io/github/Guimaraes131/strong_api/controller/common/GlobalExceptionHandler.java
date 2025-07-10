@@ -4,6 +4,7 @@ import io.github.Guimaraes131.strong_api.controller.dto.ErrorResponse;
 import io.github.Guimaraes131.strong_api.controller.dto.FieldError;
 import io.github.Guimaraes131.strong_api.exception.DuplicateRecordException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,5 +31,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDuplicateRecordException(DuplicateRecordException e) {
         return ErrorResponse.conflictResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleUsernameNotFoundException(UsernameNotFoundException e) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage(), List.of());
     }
 }
